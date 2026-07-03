@@ -17,7 +17,10 @@ def listar_funcionarios():
         f.id_funcionario, 
         f.nome,
         f.cargo,
-        s.nome as setor
+        s.nome as setor,
+        f.data_admissao,
+        f.cpf,
+        f.salario
     from funcionario f
     join setor s on f.id_setor = s.id_setor
     '''
@@ -36,19 +39,19 @@ def listar_funcionarios():
     cursor.close()
     conexao.close()
 
-def cadastrar_funcionario(nome, cargo, id_setor):
+def cadastrar_funcionario(nome, cargo, id_setor, cpf, salario, data_admissao):
 
     conexao = conectar()
     cursor = conexao.cursor()
 
     sql = '''
     insert into funcionario
-        (nome, cargo, id_setor)
+        (nome, cargo, id_setor, cpf, salario, data_admissao)
     values
-    (%s, %s, %s)
+    (%s, %s, %s, %s, %s, %s)
     '''
 
-    valores = (nome, cargo, id_setor)
+    valores = (nome, cargo, id_setor, cpf, salario, data_admissao)
     cursor.execute(sql, valores)
     conexao.commit()
 
@@ -74,3 +77,23 @@ def atualizar_cargo(cargo, id_funcionario):
 
     cursor.close()
     conexao.close()
+    
+    
+def deletar_funcionario(id_funcionario):
+    conexao = conectar()
+    cursor = conexao.cursor()
+    
+    sql = '''
+    delete from funcionario 
+    where id_funcionario = %s
+    '''
+    
+    valores = (id_funcionario,)
+    cursor.execute(sql, (valores))
+    conexao.commit()
+    
+    print("funcionario deletado")
+    
+    cursor.close()
+    conexao.close()
+    
