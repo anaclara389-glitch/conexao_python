@@ -57,7 +57,22 @@ def deletar_setor(id_setor):
     conexao.close()
     
     
-def atualizar_setor():
-    pass
+def atualizar_setor(nome, id_setor):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    sql = '''
+    update setor
+    set nome = %s
+    where id_setor = %s
+    '''
+    valores = (nome, id_setor)
+    cursor.execute(sql, valores)
+    conexao.commit()
+
+    print("Setor atualizado com sucesso!")
+
+    cursor.close()
+    conexao.close()
     
     

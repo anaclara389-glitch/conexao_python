@@ -516,3 +516,53 @@ VALUES
 'Estrutura apresentou desalinhamento',
 
 8);
+
+
+ALTER TABLE funcionario DROP FOREIGN KEY fk_funcionario_setor;
+
+-- Recria com SET NULL (id_setor já aceita nulo por padrão no seu script)
+ALTER TABLE funcionario 
+ADD CONSTRAINT fk_funcionario_setor 
+FOREIGN KEY (id_setor) REFERENCES setor(id_setor) 
+ON DELETE SET NULL;
+
+
+-- =====================================================
+-- 2. CORREÇÃO NA TABELA ORDEM_PRODUCAO
+-- =====================================================
+-- Remove a chave antiga
+ALTER TABLE ordem_producao DROP FOREIGN KEY fk_ordem_funcionario;
+
+-- Altera a coluna para ACEITAR nulo (tirando o NOT NULL antigo)
+ALTER TABLE ordem_producao MODIFY id_funcionario INT NULL;
+
+-- Recria com SET NULL
+ALTER TABLE ordem_producao 
+ADD CONSTRAINT fk_ordem_funcionario 
+FOREIGN KEY (id_funcionario) REFERENCES funcionario(id_funcionario) 
+ON DELETE SET NULL;
+
+-- ==========================================================================================================
+ALTER TABLE produto DROP FOREIGN KEY fk_produto_fornecedor;
+
+-- 2. Modifica a coluna para permitir valores nulos (tirando o NOT NULL)
+ALTER TABLE produto MODIFY id_fornecedor INT NULL;
+
+-- 3. Recria a chave estrangeira configurando o comportamento SET NULL
+ALTER TABLE produto 
+ADD CONSTRAINT fk_produto_fornecedor 
+FOREIGN KEY (id_fornecedor) REFERENCES fornecedor(id_fornecedor) 
+ON DELETE SET NULL;
+
+-- ======================================================================================================
+
+ALTER TABLE ordem_producao DROP FOREIGN KEY fk_ordem_produto;
+
+-- 2. Modifica a coluna para permitir valores nulos (removendo o NOT NULL)
+ALTER TABLE ordem_producao MODIFY id_produto INT NULL;
+
+-- 3. Recria a chave estrangeira configurando o comportamento SET NULL
+ALTER TABLE ordem_producao 
+ADD CONSTRAINT fk_ordem_produto 
+FOREIGN KEY (id_produto) REFERENCES produto(id_produto) 
+ON DELETE SET NULL;
